@@ -1,0 +1,192 @@
+#                          ﱦ 齃     ﮂ  ﵁ 爵        ﭵ     ﱦ  ﰊ 異 ﴱ אַ  'Y⃣'
+
+############## BAR ##############
+sketchybar --bar height=32 \
+                 y_offset=0 \
+                 blur_radius=0 \
+                 position=top \
+                 padding_left=0 \
+                 padding_right=0 \
+                 margin=-500 \
+                 corner_radius=0 \
+                 color=0x00434c5e \
+                 shadow=on \
+				 notch_width=200 \
+
+
+############## GLOBAL DEFAULTS ##############
+sketchybar --default updates=when_shown \
+                     icon.font="LiterationMono Nerd Font Mono:Book:16.0" \
+                     icon.color=0xffECEFF4 \
+                     icon.highlight_color=0xffE48FA8 \
+                     label.font="Liberation Mono For Powerline:Bold:16.0" \
+                     label.color=0xffECEFF4 \
+                     background.corner_radius=5 \
+                     background.height=30
+
+sketchybar --add item logo left \
+           --set logo icon= \
+		   		 icon.font="LiterationMono Nerd Font Mono:Book:24.0" \
+                 icon.color=0xffD8dee9 \
+                 icon.padding_left=16 \
+                 icon.padding_right=16 \
+				 click_script="sketchybar --update" \
+
+SPACE_ICONS=("1" "2" "3" "4" "5" "6" "7" "8" "9" "10")
+SPACES=()
+
+for i in "${!SPACE_ICONS[@]}"
+do
+  sid=$(($i+1))
+  SPACES+=(space.$sid)
+  sketchybar --add space space.$sid left \
+             --set space.$sid associated_space=$sid \
+                              icon=${SPACE_ICONS[i]} \
+                              icon.padding_left=20 \
+                              icon.padding_right=20 \
+                              icon.highlight_color=0xff8fbcbb \
+                              background.padding_left=-4 \
+                              background.padding_right=-4 \
+                              background.color=0xff3b4252 \
+                              background.drawing=on \
+                              label.drawing=off \
+                              click_script="yabai -m space --focus $sid"
+done
+
+sketchybar --add item space_separator left \
+           --set space_separator icon= \
+                                 background.padding_left=23 \
+                                 background.padding_right=23 \
+                                 label.drawing=off \
+                                 icon.color=0xff81a1c1
+
+sketchybar --add item window_title left \
+           --set window_title    script="~/.config/sketchybar/plugins/window_title.sh" \
+                                 icon.drawing=off \
+                                 label.color=0xff81a1c1 \
+           --subscribe window_title front_app_switched
+
+ 
+
+############## ITEM DEFAULTS ###############
+sketchybar --default label.padding_left=6 \
+                     label.padding_right=6 \
+                     icon.padding_left=6 \
+                     icon.padding_right=6 \
+                     icon.font="LiterationMono Nerd Font Mono:Book:20.0" \
+                     background.height=30 \
+                     background.padding_right=4 \
+                     background.padding_left=4 \
+                     background.corner_radius=5
+
+############## RIGHT ITEMS ##############
+sketchybar --add item time right \
+           --set time update_freq=1 \
+                      icon.drawing=off \
+                      script="~/.config/sketchybar/plugins/time.sh" \
+                      background.padding_left=0
+
+sketchybar --add item time_logo right\
+           --set time_logo icon= \
+                           label.drawing=off \
+                           icon.color=0xff5e81ac \
+                           label.drawing=off \
+
+sketchybar --add item date right \
+           --set date update_freq=1000 \
+                      icon.drawing=off \
+                      script="~/.config/sketchybar/plugins/date.sh" \
+                      background.padding_left=0
+
+sketchybar --add item clock_logo right\
+           --set clock_logo icon= \
+                            icon.color=0xff88c0d0\
+                            label.drawing=off \
+
+sketchybar --add item battery right \
+           --set battery update_freq=3 \
+                         icon.drawing=off \
+                         script="~/.config/sketchybar/plugins/power.sh" \
+                         background.padding_left=0
+
+sketchybar --add item power_logo right \
+           --set power_logo icon= \
+				 icon.font="LiterationMono Nerd Font Mono:Book:14.0" \
+                 icon.color=0xffa3be8c \
+                 label.drawing=off \
+
+sketchybar --add event spotify_change "com.spotify.client.PlaybackStateChanged" \
+		   --add item spot_logo e \
+           --set spot_logo icon= \
+		   				   y_offset=64 \
+                           label.drawing=off \
+                           icon.color=0xffB48EAD \
+						   click_script="sketchybar -m --set \$NAME popup.drawing=toggle" \
+						   popup.horizontal=on \
+						   popup.background.color=0xff434c5e \
+						   popup.background.corner_radius=3 \
+						   popup.align=center \
+		   --add item spotify.name popup.spot_logo \
+		   --set spotify.name label="None" \
+		   				   script="" \
+						   label.font="LiterationMono Nerd Font Mono:Book:12.0" \
+						   label.padding_left=0\
+		   --add       item            spotify.back popup.spot_logo    \
+           --set       spotify.back    icon=玲                            \
+                                       icon.padding_left=5                \
+                                       icon.padding_right=5 \
+									   icon.font="LiterationMono Nerd Font Mono:Book:14.0" \
+                                       script="~/.config/sketchybar/plugins/spotify.sh"    \
+                                       label.drawing=off                  \
+           --subscribe spotify.back    mouse.clicked                      \
+                                                                          \
+           --add       item            spotify.play popup.spot_logo    \
+           --set       spotify.play    icon=😏                              \
+                                       icon.padding_left=5                \
+                                       icon.padding_right=5               \
+                                       updates=on                         \
+                                       label.drawing=off                  \
+                                       script="~/.config/sketchybar/plugins/spotify.sh"    \
+           --subscribe spotify.play    mouse.clicked spotify_change       \
+                                                                          \
+           --add       item            spotify.next popup.spot_logo    \
+           --set       spotify.next    icon=怜                            \
+                                       icon.padding_left=5                \
+                                       icon.padding_right=10              \
+                                       label.drawing=off                  \
+									   icon.font="LiterationMono Nerd Font Mono:         Book:14.0" \
+                                       script="~/.config/sketchybar/plugins/spotify.sh"    \
+           --subscribe spotify.next    mouse.clicked                      \
+                                                                          \
+           --add       item            spotify.shuffle popup.spot_logo \
+           --set       spotify.shuffle icon=咽                           \
+                                       icon.highlight_color=0xff1DB954    \
+                                       icon.padding_left=5                \
+                                       icon.padding_right=5               \
+                                       label.drawing=off                  \
+                                       script="~/.config/sketchybar/plugins/spotify.sh"    \
+           --subscribe spotify.shuffle mouse.clicked                      \
+                                                                          \
+           --add       item            spotify.repeat popup.spot_logo  \
+           --set       spotify.repeat  icon=凌                            \
+                                       icon.highlight_color=0xff1DB954    \
+                                       icon.padding_left=5                \
+                                       icon.padding_right=5               \
+                                       label.drawing=off                  \
+                                       script="~/.config/sketchybar/plugins/spotify.sh"    \
+           --subscribe spotify.repeat  mouse.clicked
+## LOCK/UNLOCK ANIMATIONS ##
+sketchybar --add event lock   "com.apple.screenIsLocked"   \
+           --add event unlock "com.apple.screenIsUnlocked" \
+                                                           \
+           --add item         animator left                \
+           --set animator     drawing=off                  \
+                              updates=on                   \
+                              script="~/.config/sketchybar/plugins/wake.sh" \
+           --subscribe        animator unlock \
+		   --subscribe 		  animator lock
+
+############## FINALIZING THE SETUP ##############
+sketchybar --update
+
+echo "sketchybar configuration loaded..."
